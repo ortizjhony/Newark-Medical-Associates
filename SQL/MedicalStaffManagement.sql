@@ -1,4 +1,4 @@
---Add/Remove a Staff Member
+-- 1. Add/Remove a Staff Member
 
 	-- Add
 	INSERT INTO Personnel (Name, Gender, Address, TelephoneNumber, Salary) VALUES
@@ -8,21 +8,25 @@
 	DELETE FROM Personnel
 	WHERE EmploymentNumber = 6;
 
--- View Staff Member per Job Type
+-- 2. View Staff Member per Job Type
 
+SELECT Role, count(*) FROM Personnel GROUP BY Role;
 SELECT * FROM Personnel
 WHERE Role = 'Nurse';
 
---Schedule Job Shift
+-- 3. Schedule Job Shift
+	-- Add Job Shift
+		INSERT INTO JobShift (EmploymentNumber, ShiftDate, ShiftStart, ShiftEnd) VALUES
+		(4, '2023-12-01', '08:00:00', '16:00:00');
 
--- Assuming there is a JobShift table to manage work shifts
--- Schedule a new shift
-INSERT INTO JobShift (PersonnelNumber, ShiftDate, ShiftStart, ShiftEnd) VALUES
-(4, '2023-12-01', '08:00:00', '16:00:00');
+	-- See Schedule
+	SELECT p.Name, js.ShiftDate, js.ShiftStart, js.ShiftEnd
+	FROM JobShift js
+	JOIN Personnel p ON js.EmploymentNumber = p.EmploymentNumber
+	WHERE js.ShiftDate = '2023-12-01';
+    
+    -- Remove a Job Shift
+    DELETE FROM JobShift 
+	WHERE JobShiftID = 6;
 
-
-SELECT p.Name, js.ShiftDate, js.ShiftStart, js.ShiftEnd
-FROM JobShift js
-JOIN Personnel p ON js.EmploymentNumber = p.EmploymentNumber
-WHERE js.ShiftDate = '2023-12-01';
 
