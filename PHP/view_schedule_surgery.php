@@ -1,7 +1,6 @@
 <?php
-   include('session.php');
+include('session.php');
 ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -10,19 +9,18 @@
 </head>
 <body>
     <h1>View Surgeries</h1>
-
-    <!-- Filter Options -->
-    <form id="filterForm">
+    <form id="filterForm" method="post" action="process_filter.php">
         <label for="surgeryRoom">Surgery Room:</label>
         <select id="surgeryRoom" name="surgeryRoom">
-            <!-- Populate with room options -->
+            <option value="">Select Surgery Room (Optional)</option>
             <?php include('get_SurgeryRoom.php'); ?>
-        </select>
+        </select><br>
 
-        <label for="date">Surgery Date:</label>
+        <label for="surgeryDates">Surgery Date:</label>
         <select id="surgeryDates" name="surgeryDates">
             <option value="">Select Date (Optional)</option>
-            <?php
+            
+             <?php
             include('session.php');
 
             $sql = "SELECT DISTINCT DATE_FORMAT(SurgeryDateTime, '%Y-%m-%d') AS 'Dates' FROM SurgerySchedule ORDER BY SurgeryDateTime";
@@ -35,37 +33,23 @@
             }
             $conn->close();
             ?>
-        </select>
+       
+        </select><br>
 
         <label for="surgeon">Surgeon:</label>
         <select id="surgeon" name="surgeon">
-            <!-- Populate with surgeon options -->
+            <option value="">Select Surgeon (Optional)</option>
             <?php include('populate_Surgeons.php'); ?>
-        </select>
+        </select><br>
 
         <label for="patient">Patient:</label>
         <select id="patient" name="patient">
-            <!-- Populate with patient options -->
+            <option value="">Select Patient (Optional)</option>
             <?php include('populate_SurgeryPatients.php'); ?>
-        </select>
+        </select><br>
 
         <input type="submit" value="Filter">
     </form>
-
-    <!-- Surgery Details Table -->
-    <table id="surgeryDetails">
-        <thead>
-            <tr>
-                <th>Surgery Name</th>
-                <th>Surgery Room</th>
-                <th>Date</th>
-                <th>Surgeon Name</th>
-                <th>Patient Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Surgery details will be populated here -->
-        </tbody>
-    </table>
 </body>
+<a href="index.php"><button>Return to Home Page</button></a>
 </html>

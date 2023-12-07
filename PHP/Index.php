@@ -41,6 +41,7 @@
         <h2>Inpatient Management</h2>
         <button onclick="window.location.href='Patient_Personnel_Assignments.php'">Patient/Personnel Assignments</button>
         <button onclick="window.location.href='view_schedule_surgery.php'">View Surgery Schedule</button>
+        <button onclick="window.location.href='schedule_surgery_form.php'">Book Surgery</button>
     </div>
 
     <div id="staffMgmt" class="tab">
