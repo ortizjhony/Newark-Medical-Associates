@@ -32,31 +32,15 @@
         <h2>Patient Management</h2>
         <button onclick="window.location.href='add_patient_form.php'">Insert a New Patient</button>
         <button onclick="window.location.href='view_patient_info.php'">View Patient Information</button>
-        <button onclick="showSubTab('scheduleAppointment')">Schedule an Appointment with a Doctor</button>
-        <button onclick="showSubTab('checkDiagnoses')">Check Previous Diagnoses and Illnesses</button>
-        <button onclick="showSubTab('viewSchedule')">View Schedule per Doctor and per Day</button>
-
-
-        <div id="viewPatientInfo" class="sub-tab">
-            <!-- View patient information form -->
-        </div>
-
-        <div id="scheduleAppointment" class="sub-tab">
-            <!-- Schedule an appointment form -->
-        </div>
-
-        <div id="checkDiagnoses" class="sub-tab">
-            <!-- Check previous diagnoses form -->
-        </div>
-
-        <div id="viewSchedule" class="sub-tab">
-            <!-- View schedule per doctor and day form -->
-        </div>
+        <button onclick="window.location.href='schedule_appointment_form.php'">Schedule an Appointment with a Doctor</button>
+        <button onclick="window.location.href='checkDiagnoses.php'">Check Previous Diagnoses and Illnesses</button>
+        <button onclick="window.location.href='view_schedule.php'">View Schedule per Doctor and per Day</button>
     </div>
 
     <div id="inPatientMgmt" class="tab">
         <h2>Inpatient Management</h2>
-        <p>Details about inpatient management features...</p>
+        <button onclick="window.location.href='Patient_Personnel_Assignments.php'">Patient/Personnel Assignments</button>
+        <button onclick="window.location.href='view_schedule_surgery.php'">View Surgery Schedule</button>
     </div>
 
     <div id="staffMgmt" class="tab">
