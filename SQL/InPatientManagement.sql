@@ -1,61 +1,65 @@
--- Check for Available Room/Bed
+-- 1. Check for Available Room/Bed
 
-SELECT NursingUnit, RoomNumber, BedNumber
-FROM InPatient
-WHERE PatientNumber IS NULL;
+SELECT RoomNumber, BedNumber 
+FROM Room
+WHERE Occupied = FALSE;
 
 
--- Assign/Remove a Patient to a Room/Bed
+-- 2. Assign/Remove a Patient to a Room/Bed
 
 	-- Assign
+	UPDATE Room
+	SET Occupied = TRUE, CurrentPatient = [InPatientID]
+	WHERE RoomNumber = '[Room_Number]' AND BedNumber = '[Bed_Number]';
+
+	-- Remove
+	UPDATE Room
+	SET Occupied = FALSE, CurrentPatient = NULL
+	WHERE RoomNumber = '[Room_Number]' AND BedNumber = '[Bed_Number]';
+
+
+
+-- 3.Assign/Remove a Doctor to a Patient
+
+-- Assign a doctor
+UPDATE Patient
+SET PrimaryPhysician = [Doctor_EmploymentNumber]
+WHERE PatientNumber = [Patient_Number];
+
+-- Remove a doctor
+UPDATE Patient
+SET PrimaryPhysician = NULL
+WHERE PatientNumber = [Patient_Number];
+
+-- 4. Assign/Remove a Nurse to a Patient
+
+	-- Assign a nurse
 	UPDATE InPatient
-	SET PatientNumber = 1
-	WHERE NursingUnit = 1 AND RoomNumber = '101' AND BedNumber = 'A';
+	SET AttendingNurse = [Nurse_EmploymentNumber]
+	WHERE InPatientID = [InPatientID];
 
-	-- Remove
+	-- Remove a nurse
 	UPDATE InPatient
-	SET PatientNumber = NULL
-	WHERE PatientNumber = 1;
+	SET AttendingNurse = NULL
+	WHERE InPatientID = [InPatientID];
 
+-- 5. View Scheduled Surgery per Room and per Day
+SELECT SurgeryDateTime, SurgeryCode
+FROM SurgerySchedule
+WHERE OperationTheatre = 'Theatre 1' -- AND DATE(SurgeryDateTime) = '[YYYY-MM-DD]';
 
---Assing/Remove a Doctor to a Patient
-	-- Assign
-	UPDATE Patient
-	SET PrimaryPhysician = 2
-	WHERE PatientNumber = 1;
+-- 6. View Scheduled Surgery per Surgeon and per Day
 
-	-- Remove
-	UPDATE Patient
-	SET PrimaryPhysician = NULL
-	WHERE PatientNumber = 1;
+SELECT SurgeryDateTime, SurgeryCode
+FROM SurgerySchedule
+WHERE Surgeon = 4; -- AND DATE(SurgeryDateTime) = '[YYYY-MM-DD]';
 
+-- 7. Book a Surgery
 
+INSERT INTO SurgerySchedule (SurgeryCode, OperationTheatre, Surgeon, Patient, SurgeryDateTime) 
+VALUES (2, 'Theatre 2', 4, 3, '2023-07-15 15:00:00');
 
--- Assign/Remove a Nurse to a Patient
-
-	-- Assuming there is a NursePatient table to assign nurses to patients
-	-- Assign
-	INSERT INTO NursePatient (NurseID, PatientNumber) VALUES
-	(5, 1);
-
-	-- Remove
-	DELETE FROM NursePatient
-	WHERE NurseID = 5 AND PatientNumber = 1;
-
-
--- View Scheduled Surgery per Surgeon and per Day
-SELECT * FROM SurgerySchedule
-WHERE Surgeon = 3 AND DATE(SurgeryDateTime) = '2023-12-01';
-
-
--- Book Surgery
-
-INSERT INTO SurgerySchedule (SurgeryCode, OperationTheatre, Surgeon, Patient, SurgeryDateTime) VALUES
-(1, 'OR1', 3, 1, '2023-12-15 08:00:00');
-
-
--- View Scheduled Surgery per Patient
-SELECT * FROM SurgerySchedule
-WHERE Patient = 1;
-
-
+-- 8. View Scheduled Surgery per Patient
+SELECT SurgeryDateTime, SurgeryCode
+FROM SurgerySchedule
+WHERE Patient = 2;

@@ -1,3 +1,9 @@
+-- CREATE Database
+DROP DATABASE MMA;
+CREATE DATABASE MMA;
+
+USE MMA;
+
 -- Personnel Table
 CREATE TABLE Personnel (
     EmploymentNumber INT PRIMARY KEY AUTO_INCREMENT,
@@ -6,7 +12,12 @@ CREATE TABLE Personnel (
     Address VARCHAR(255) NOT NULL,
     TelephoneNumber VARCHAR(15),
     Salary DECIMAL(8, 2), -- NULL for surgeons
-    Role VARCHAR(50)
+    Role VARCHAR(50),
+    Specialty VARCHAR(50), -- For Physicians
+    Grade INT CHECK (Grade BETWEEN 1 AND 10), -- For Nurses
+    YearsExperience INT CHECK (YearsExperience >= 0), -- For Nurses
+    ContractType VARCHAR(50), -- For Surgeons
+    ContractLength INT CHECK (ContractLength > 0) -- For Surgeons
 );
 
 -- Surgery Skill Table
@@ -47,14 +58,6 @@ CREATE TABLE Allergy (
     Description VARCHAR(255) NOT NULL
 );
 
--- Physician Table
-CREATE TABLE Physician (
-    EmploymentNumber INT PRIMARY KEY,
-    Specialty VARCHAR(50) NOT NULL,
-    FOREIGN KEY (EmploymentNumber) REFERENCES Personnel(EmploymentNumber)
-    ON DELETE CASCADE
-);
-
 
 -- Patient Table
 CREATE TABLE Patient (
@@ -66,7 +69,8 @@ CREATE TABLE Patient (
     TelephoneNumber VARCHAR(15),
     SocialSecurityNumber VARCHAR(11) UNIQUE NOT NULL,
     PrimaryPhysician INT,
-    FOREIGN KEY (PrimaryPhysician) REFERENCES Physician(EmploymentNumber)
+    BloodType VARCHAR(3) CHECK (BloodType IN ('A', 'B', 'AB', 'O')),
+    FOREIGN KEY (PrimaryPhysician) REFERENCES Personnel(EmploymentNumber)
     ON DELETE SET NULL
 );
 
@@ -77,8 +81,7 @@ CREATE TABLE Ownership (
     PhysicianID INT, -- NULL if the owner is a corporation
     PhysicianName VARCHAR(100), -- NULL if the owner is a corporation
     Headquarters VARCHAR(255), -- NULL if the owner is a physician
-    PercentageOwnership DECIMAL(5, 2) NOT NULL CHECK (PercentageOwnership > 0 AND PercentageOwnership <= 100),
-    FOREIGN KEY (PhysicianID) REFERENCES Physician(EmploymentNumber)
+    PercentageOwnership DECIMAL(5, 2) NOT NULL CHECK (PercentageOwnership > 0 AND PercentageOwnership <= 100)
     -- Add a constraint to ensure that either CorporationName or PhysicianID is filled
 );
 
@@ -88,15 +91,12 @@ CREATE TABLE Consultation (
     PatientNumber INT NOT NULL,
     PhysicianNumber INT NOT NULL,
     ConsultationDateTime DATETIME NOT NULL,
-    Notes TEXT,
-    FOREIGN KEY (PatientNumber) REFERENCES Patient(PatientNumber),
-    FOREIGN KEY (PhysicianNumber) REFERENCES Physician(EmploymentNumber)
+    Notes TEXT
 );
 
-CREATE TABLE MedicalMeasurement (
+CREATE TABLE MedicalData (
     MeasurementID INT PRIMARY KEY AUTO_INCREMENT,
     ConsultationID INT,
-    BloodType VARCHAR(3) CHECK (BloodType IN ('A', 'B', 'AB', 'O')),
     CholesterolHDL INT CHECK (CholesterolHDL > 0),
     CholesterolLDL INT CHECK (CholesterolLDL > 0),
     Triglyceride INT CHECK (Triglyceride > 0),
@@ -104,8 +104,6 @@ CREATE TABLE MedicalMeasurement (
     HeartDiseaseRisk CHAR(1), -- 'N', 'L', 'M', 'H'
     FOREIGN KEY (ConsultationID) REFERENCES Consultation(ConsultationID)
 );
-
-
 
 -- PatientIllness Table
 CREATE TABLE PatientIllness (
@@ -125,33 +123,16 @@ CREATE TABLE PatientAllergy (
     FOREIGN KEY (AllergyCode) REFERENCES Allergy(AllergyCode)
 );
 
--- Surgeon Table
-CREATE TABLE Surgeon (
-    EmploymentNumber INT PRIMARY KEY,
-    ContractType VARCHAR(50) NOT NULL,
-    ContractLength INT NOT NULL CHECK (ContractLength > 0),
-    FOREIGN KEY (EmploymentNumber) REFERENCES Personnel(EmploymentNumber)
-    ON DELETE CASCADE
-);
-
--- Nurse Table
-CREATE TABLE Nurse (
-    EmploymentNumber INT PRIMARY KEY,
-    Grade INT CHECK (Grade BETWEEN 1 AND 10),
-    YearsExperience INT CHECK (YearsExperience >= 0),
-    FOREIGN KEY (EmploymentNumber) REFERENCES Personnel(EmploymentNumber)
-    ON DELETE CASCADE
-);
-
 
 -- NurseSkill Table
 CREATE TABLE NurseSkill (
     NurseID INT,
     SkillCode INT,
     PRIMARY KEY (NurseID, SkillCode),
-    FOREIGN KEY (NurseID) REFERENCES Nurse(EmploymentNumber),
+    FOREIGN KEY (NurseID) REFERENCES Personnel(EmploymentNumber) ON DELETE CASCADE,
     FOREIGN KEY (SkillCode) REFERENCES SurgerySkill(SkillCode)
 );
+
 
 -- SurgerySkillRequirement Table
 CREATE TABLE SurgerySkillRequirement (
@@ -166,8 +147,9 @@ CREATE TABLE SurgerySkillRequirement (
 CREATE TABLE NurseSurgeryAssignment (
     NurseID INT PRIMARY KEY,
     SurgeryCode INT NOT NULL,
-    FOREIGN KEY (NurseID) REFERENCES Nurse(EmploymentNumber),
+    FOREIGN KEY (NurseID) REFERENCES Personnel(EmploymentNumber),
     FOREIGN KEY (SurgeryCode) REFERENCES Surgery(SurgeryCode)
+    ON DELETE CASCADE
 );
 
 
@@ -181,8 +163,7 @@ CREATE TABLE SurgerySchedule (
     Patient INT NOT NULL,
     SurgeryDateTime DATETIME NOT NULL,
     FOREIGN KEY (SurgeryCode) REFERENCES Surgery(SurgeryCode),
-    FOREIGN KEY (Surgeon) REFERENCES Surgeon(EmploymentNumber),
-    FOREIGN KEY (Patient) REFERENCES Patient(PatientNumber)
+	UNIQUE (ScheduleID,SurgeryCode, Surgeon, Patient)
 );
 
 
@@ -194,10 +175,8 @@ CREATE TABLE Prescription (
     MedicationCode INT NOT NULL,
     Dosage VARCHAR(50) NOT NULL,
     Frequency VARCHAR(50) NOT NULL,
-    FOREIGN KEY (Physician) REFERENCES Physician(EmploymentNumber),
-    FOREIGN KEY (Patient) REFERENCES Patient(PatientNumber),
     FOREIGN KEY (MedicationCode) REFERENCES Medication(MedicationCode),
-    UNIQUE (Physician, Patient, MedicationCode)
+    UNIQUE (PrescriptionID,Physician, Patient, MedicationCode)
 );
 
 -- MedicationInteraction Table
@@ -212,14 +191,24 @@ CREATE TABLE MedicationInteraction (
 
 -- InPatient Table (for patients staying in the clinic)
 CREATE TABLE InPatient (
-    PatientNumber INT PRIMARY KEY,
+    InPatientID INT PRIMARY KEY AUTO_INCREMENT,
+    PatientNumber INT,
     DateOfAdmission DATE NOT NULL,
     NursingUnit INT CHECK (NursingUnit BETWEEN 1 AND 7),
-    RoomNumber VARCHAR(10) NOT NULL,
-    BedNumber CHAR(1) CHECK (BedNumber IN ('A', 'B')),
-    FOREIGN KEY (PatientNumber) REFERENCES Patient(PatientNumber)
+    AttendingNurse INT,
+    FOREIGN KEY (PatientNumber) REFERENCES Patient(PatientNumber),
+    FOREIGN KEY (AttendingNurse) REFERENCES Personnel(EmploymentNumber)
     ON DELETE CASCADE
 );
+
+CREATE TABLE Room (
+    RoomNumber VARCHAR(10),
+    BedNumber CHAR(1) CHECK (BedNumber IN ('A', 'B')),
+    Occupied BOOLEAN NOT NULL DEFAULT FALSE,
+    CurrentPatient INT,
+    UNIQUE(RoomNumber,BedNumber)
+);
+
 
 
 CREATE TABLE JobShift (
@@ -230,4 +219,34 @@ CREATE TABLE JobShift (
     ShiftEnd TIME NOT NULL,
     FOREIGN KEY (EmploymentNumber) REFERENCES Personnel(EmploymentNumber)
     ON DELETE CASCADE
+);
+
+
+CREATE TABLE HistoricalPersonnel (
+    EmploymentNumber INT,
+    Name VARCHAR(100),
+    Gender CHAR(1),
+    Address VARCHAR(255),
+    TelephoneNumber VARCHAR(15),
+    Salary DECIMAL(8, 2),
+    Role VARCHAR(50),
+    Specialty VARCHAR(50),
+    Grade INT,
+    YearsExperience INT,
+    ContractType VARCHAR(50),
+    ContractLength INT,
+    DeletionDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Patient Table
+CREATE TABLE HistoricalPatient (
+    PatientNumber INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100) NOT NULL,
+    Gender CHAR(1) CHECK (Gender IN ('M', 'F')),
+    DateOfBirth DATE NOT NULL,
+    Address VARCHAR(255) NOT NULL,
+    TelephoneNumber VARCHAR(15),
+    SocialSecurityNumber VARCHAR(11) UNIQUE NOT NULL,
+    PrimaryPhysician INT,
+	DeletionDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

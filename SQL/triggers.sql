@@ -1,7 +1,10 @@
+use MMA;
+
+
 DELIMITER $$
 
-CREATE TRIGGER trg_before_insert_medicalmeasurement
-BEFORE INSERT ON MedicalMeasurement
+CREATE TRIGGER trg_before_insert_MedicalData
+BEFORE INSERT ON MedicalData
 FOR EACH ROW
 BEGIN
     DECLARE totalCholesterol INT DEFAULT (NEW.CholesterolHDL + NEW.CholesterolLDL + NEW.Triglyceride / 5);
@@ -43,32 +46,11 @@ END$$
 DELIMITER ;
 
 
-DELIMITER $$
-
-CREATE TRIGGER trg_before_insert_surgeryschedule
-BEFORE INSERT ON SurgerySchedule
-FOR EACH ROW
-BEGIN
-    DECLARE nurse_count INT;
-
-    -- Count the number of nurses assigned to the surgery type
-    SELECT COUNT(*) INTO nurse_count
-    FROM NurseSurgeryAssignment
-    WHERE SurgeryCode = NEW.SurgeryCode;
-
-    IF nurse_count < 2 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Each type of surgery must have at least two nurses.';
-    END IF;
-END$$
-
-DELIMITER ;
-
 
 DELIMITER $$
 
 CREATE TRIGGER trg_after_delete_physician
-AFTER DELETE ON Physician
+AFTER DELETE ON Personnel
 FOR EACH ROW
 BEGIN
     -- Delete prescriptions by the physician
@@ -81,7 +63,7 @@ DELIMITER ;
 DELIMITER $$
 
 CREATE TRIGGER trg_after_delete_primaryphysician
-AFTER DELETE ON Physician
+BEFORE DELETE ON Personnel
 FOR EACH ROW
 BEGIN
     DECLARE default_physician_id INT;
@@ -89,8 +71,8 @@ BEGIN
     -- Assume there is a field in the Physician table that marks the chief of staff
     -- This query gets the EmploymentNumber of the chief of staff
     SELECT EmploymentNumber INTO default_physician_id
-    FROM Physician
-    WHERE IsChiefOfStaff = TRUE
+    FROM Personnel pe 
+    WHERE pe.Role = 'Chief of Staff'
     LIMIT 1;
 
     -- Reassign patients to the chief of staff
@@ -100,6 +82,9 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+
+DELIMITER $$
 
 
 DELIMITER $$
@@ -132,7 +117,7 @@ DELIMITER ;
 DELIMITER $$
 
 CREATE TRIGGER Before_Nurse_Delete
-BEFORE DELETE ON Nurse
+BEFORE DELETE ON Personnel
 FOR EACH ROW
 BEGIN
     -- Set to NULL or a default nurse
@@ -147,7 +132,7 @@ DELIMITER ;
 DELIMITER $$
 
 CREATE TRIGGER Before_Physician_Delete_Prescription
-BEFORE DELETE ON Physician
+BEFORE DELETE ON Personnel
 FOR EACH ROW
 BEGIN
     DELETE FROM Prescription
@@ -156,14 +141,27 @@ END$$
 
 DELIMITER ;
 
-ALTER TABLE Physician ADD CONSTRAINT fk_physician_personnel
-FOREIGN KEY (EmploymentNumber) REFERENCES Personnel(EmploymentNumber)
-ON DELETE CASCADE ON UPDATE CASCADE;
+DELIMITER $$
+CREATE TRIGGER trg_before_delete_personnel
+BEFORE DELETE ON Personnel
+FOR EACH ROW
+BEGIN
+    INSERT INTO HistoricalPersonnel 
+    (EmploymentNumber, Name, Gender, Address, TelephoneNumber, Salary, Role, Specialty, Grade, YearsExperience, ContractType, ContractLength)
+    VALUES 
+    (OLD.EmploymentNumber, OLD.Name, OLD.Gender, OLD.Address, OLD.TelephoneNumber, OLD.Salary, OLD.Role, OLD.Specialty, OLD.Grade, OLD.YearsExperience, OLD.ContractType, OLD.ContractLength);
+END$$
+DELIMITER ;
 
-ALTER TABLE Surgeon ADD CONSTRAINT fk_surgeon_personnel
-FOREIGN KEY (EmploymentNumber) REFERENCES Personnel(EmploymentNumber)
-ON DELETE CASCADE ON UPDATE CASCADE;
+DELIMITER $$
+CREATE TRIGGER trg_before_delete_patient
+BEFORE DELETE ON Patient
+FOR EACH ROW
+BEGIN
+    INSERT INTO HistoricalPatient
+    (PatientNumber, Name, Gender,DateOfBirth, Address, TelephoneNumber, SocialSecurityNumber, PrimaryPhysician)
+    VALUES 
+    (OLD.PatientNumber, OLD.Name,  OLD.Gender, OLD.DateOfBirth,OLD.Address, OLD.TelephoneNumber, OLD.SocialSecurityNumber, OLD.PrimaryPhysician);
+END$$
+DELIMITER ;
 
-ALTER TABLE Nurse ADD CONSTRAINT fk_nurse_personnel
-FOREIGN KEY (EmploymentNumber) REFERENCES Personnel(EmploymentNumber)
-ON DELETE CASCADE ON UPDATE CASCADE;
