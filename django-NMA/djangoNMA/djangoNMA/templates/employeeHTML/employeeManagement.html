@@ -1,0 +1,45 @@
+<h1> Employee Management</h1>
+
+<p> Search or add employees.</p>
+
+<a href="{% url 'addEmp' %}"><button>Add New Employee</button></a>
+
+<form method="GET" action="{% url 'searchEmployee_view' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+   <button type="Submit">Search</button>
+</form>
+  
+{% if results %}
+    <table>
+        <tr>
+            <th>Employee ID</th>
+            <th>SSN</th>
+            <th>Name</th>
+            <th>Salary</th>
+            <th>Gender</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Job type</th>
+        </tr>
+        {% for result in results %}
+            <tr>
+                <td>{{result.empid}}</td>
+                <td>{{result.ssn}}</td>
+                <td>{{result.name}}</td>
+                <td>{{result.salary}}</td>
+                <td>{{result.gender}}</td>
+                <td>{{result.address}}</td>
+                <td>{{result.phone}}</td>
+                <td>{{result.jobType}}</td>
+            </tr>
+        {% endfor %}
+    
+    </table>
+
+{% else %}
+
+    <p> No results found.</p>
+
+{% endif %}
+

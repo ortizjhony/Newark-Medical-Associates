@@ -1,0 +1,15 @@
+<h1> Create Employee</h1>
+
+<form method="POST" action="{% url 'addEmp' %}" enctype="multipart/form-data">
+  {% csrf_token%}
+ 
+    {{form}}
+
+ <button>Submit</button>
+</form>
+
+
+<!-- when creating links remember to reference the name you gave it in urls.py-->
+<a href="{% url 'searchEmployee_view' %}"><button>Employee Management</button></a>
+
+

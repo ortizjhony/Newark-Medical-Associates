@@ -1,0 +1,44 @@
+<h1> Patient Management</h1>
+
+<p> Search or add patients.</p>
+
+<a href="{% url 'addPatient' %}"><button>Add New Patient</button></a>
+
+
+
+<form method="GET" action="{% url 'searchPatient_view' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+   <button type="Submit">Search</button>
+</form>
+
+{% if results %}
+    <table>
+        <tr>
+            <th>Patient ID</th>
+            <th>SSN</th>
+            <th>Name</th>
+            <th>DOB</th>
+            <th>Gender</th>
+            <th>Address</th>
+            
+        </tr>
+        {% for result in results %}
+            <tr>
+                <td>{{result.pnum}}</td>
+                <td>{{result.ssn}}</td>
+                <td>{{result.name}}</td>
+                <td>{{result.dob}}</td>
+                <td>{{result.gender}}</td>
+                <td>{{result.address}}</td>
+            </tr>
+        {% endfor %}
+    
+    </table>
+
+{% else %}
+
+    <p> No results found.</p>
+
+{% endif %}
+

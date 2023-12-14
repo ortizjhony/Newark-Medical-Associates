@@ -1,0 +1,15 @@
+<h1> Create Patient</h1>
+
+<form method="POST" action="{% url 'addPatient' %}" enctype="multipart/form-data">
+  {% csrf_token%}
+ 
+    {{form}}
+
+ <button>Submit</button>
+</form>
+
+
+<!-- when creating links remember to reference the name you gave it in urls.py-->
+<a href="{% url 'searchPatient_view' %}"><button>Patient Management</button></a>
+
+
