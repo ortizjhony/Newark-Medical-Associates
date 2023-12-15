@@ -6,9 +6,45 @@
 <html>
 <head>
     <title>Newark Medical Associates</title>
-    <style>
+   <style>
         .tab, .sub-tab {
             display: none;
+        }
+        /* Additional styles */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .tab {
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        button {
+            display: inline-block;
+            background: #333;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #555;
+        }
+        .pdf-container {
+            height: 500px;
+        }
+        .pdf-container iframe {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
@@ -21,11 +57,20 @@
     <button onclick="showTab('inPatientMgmt')">Inpatient Management</button>
     <button onclick="showTab('staffMgmt')">Clinic Staff Management</button>
 
-    <div id="appReq" class="tab">
-        <h2>Database Design Requirements</h2>
-        <p>
-            The Newark Medical Associates clinic database is designed for comprehensive clinic management, including surgeries, patient data, medications, and employee details. It encompasses tables for personnel, surgery skills, medications, patients, consultations, and more. This design facilitates tracking surgery types, recording patient illnesses and allergies, and managing staff shifts, ensuring efficient clinic operation.
-        </p>
+  <div id="appReq" class="tab">
+        <h2>Database Requirements</h2>
+        <div class="pdf-container">
+            <iframe src="Database_design.pdf" style="width: 90%; height: 500px;" title="Database Design"></iframe>
+        </div>
+        <h2>ERD</h2>
+        <div class="pdf-container">
+            <iframe src="CS631 ERD DeJesus Ortiz.drawio.pdf" style="width: 90%; height: 500px;" title="Database Design"></iframe>
+
+        </div>
+        <h2>Application Requirements</h2>
+        <div class="pdf-container">
+            <iframe src="app_requirements.pdf" style="width: 90%; height: 500px;" title="Database Design"></iframe>
+        </div>
     </div>
 
     <div id="patientMgmt" class="tab">
