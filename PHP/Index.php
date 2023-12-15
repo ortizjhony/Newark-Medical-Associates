@@ -46,7 +46,7 @@
 
     <div id="staffMgmt" class="tab">
         <h2>Clinic Staff Management</h2>
-        <p>Details about staff management features...</p>
+        <button onclick="window.location.href='Personnel.php'">Personnel Management</button>
     </div>
 
     <script>
