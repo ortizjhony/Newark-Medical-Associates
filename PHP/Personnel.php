@@ -26,5 +26,8 @@
     </div>
 </body>
 
+
+<a href="Add_Personnel_form.php"><button>Add Personnel</button></a>
+<a href='delete_personnel.php'><button>Delete Personnel</button></a>
 <a href="index.php"><button>Return to Home Page</button></a>
 </html>

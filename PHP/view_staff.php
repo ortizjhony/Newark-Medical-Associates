@@ -152,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             break;
         default:
             // code...
-            echo "TEST";
+
             $sql = "SELECT EmploymentNumber, Name, Gender, Address, TelephoneNumber, Role FROM `Personnel`";
             $result = $conn->query($sql);
             if (!$result) {
@@ -187,6 +187,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 
+
+echo '<a href="Add_Personnel_form.php"><button>Add Personnel</button></a>';
+echo "<a href='delete_personnel.php'><button>Delete Personnel</button></a>";
 echo '<a href="Personnel.php"><button>Return to View Staff Page</button></a>';
 echo '<a href="index.php"><button>Return to Home Page</button></a>';
 ?>
