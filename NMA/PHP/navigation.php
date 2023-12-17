@@ -56,9 +56,9 @@
                                 <li><a href="#" onclick="window.location.href='available_rooms.php'">View Room/Bed Schedule</a></li>
                                 <li><a href="#" onclick="showTab('Assignments')">Patient/Doctor/Nurse Management</a></li>       
                                     <ul aria-expanded="false"> 
-                                        <li><a href="#" onclick="window.location.href='patientBedAssignment.php'">Assign/Remove a Patient to a Room/Bed</a></li>
-                                        <li><a href="#" onclick="window.location.href='display_current_assignments.php'">Assign/Remove a Doctor to a Patient</a></li> 
-                                        <li><a href="#" onclick="window.location.href='display_current_nurse_assignments.php'">Assign/Remove a Nurse to a Patient</a></li> 
+                                        <li><a href="#" onclick="window.location.href='patientBedAssignment.php'">Assign/Remove a Patient's Room/Bed</a></li>
+                                        <li><a href="#" onclick="window.location.href='display_current_assignments.php'">Assign/Remove a Doctor</a></li> 
+                                        <li><a href="#" onclick="window.location.href='display_current_nurse_assignments.php'">Assign/Remove a Nurse</a></li> 
 
                                     </ul>
 
@@ -71,7 +71,12 @@
                                 <i class="icon-speedometer menu-icon"></i><span class="nav-text">Clinic Managment</span>
                             </a>
                             <ul aria-expanded="false">
-                                <li><a href="#" onclick="window.location.href='Personnel.php'">Personnel Management</a></li>
+                                <li><a href="#" onclick="window.location.href='Personnel.php'"> View Personnel</a></li>
+                                    <ul aria-expanded="false"> 
+                                            <li><a href="#" onclick="window.location.href='Add_Personnel_form.php'">Add Personnel</a></li>
+                                            <li><a href="#" onclick="window.location.href='delete_personnel.php'">Delete Personnel</a></li> 
+
+                                        </ul>
                             </ul>
                         </li>
                     </li>
