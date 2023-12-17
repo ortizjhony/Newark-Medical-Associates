@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $scheduleDate = $_POST['schedule_date'];
 
     // Modify the query to include the doctor's name
-    $sql = "SELECT c.ConsultationDateTime, p.Name AS PatientName, doc.Name AS DoctorName
+    $sql = "SELECT c.ConsultationDateTime, p.Name AS PatientName, doc.Name AS DoctorName, c.Notes, c.ConsultationID
             FROM Consultation c
             INNER JOIN Patient p ON c.PatientNumber = p.PatientNumber
             INNER JOIN Personnel doc ON c.PhysicianNumber = doc.EmploymentNumber
@@ -24,13 +24,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Start the table and print the first row
         echo "<h2>Schedule for Doctor: $doctorName on $scheduleDate</h2>";
         echo "<table border='1'>";
-        echo "<tr><th>Time</th><th>Patient Name</th></tr>";
+        echo "<tr><th>Time</th><th>Patient Name</th><th>Reason for Consulation</th><th></th></tr>";
         echo "<tr>";
         echo "<td>" . $row["ConsultationDateTime"] . "</td>";
         echo "<td>" . $row["PatientName"] . "</td>";
+        echo "<td>" . $row["Notes"] . "</td>";
+        echo "<td><a href='consulation_details_form.php?consultation_id=" . $row["ConsultationID"] . "'><button>Enter Consulation</button></a></td>";
         echo "</tr>";
 
-        // Continue fetching the rest of the rows
+        // Continue fetching the rest of the rows.
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
             echo "<td>" . $row["ConsultationDateTime"] . "</td>";
