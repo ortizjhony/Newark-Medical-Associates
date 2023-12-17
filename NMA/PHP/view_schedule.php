@@ -34,7 +34,7 @@
         ?>
 
     <div class="content-body">
-        <div class="col-lg-12">
+        <div class="col-lg-12 container-fluid">
                         <div class="card">
                             <div class="card-body">
                                 <div class="basic-form">
@@ -64,6 +64,7 @@
                                             <div class="col-3"> </div>
                                             <div class="col-3">    
                                                 <button class="btn btn-success btn" type="submit" class="btn btn-dark" value="Submit">View Schedule</button>
+
                                             </div>
                                         </div>
                                       

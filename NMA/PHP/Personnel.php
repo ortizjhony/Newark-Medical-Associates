@@ -28,7 +28,7 @@
  
 
 
-        <div class="col-lg-12">
+        <div class="col-lg-12 container-fluid">
                         <div class="card">
                             <div class="card-body">
                                 <div class="basic-form">

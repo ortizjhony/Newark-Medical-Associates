@@ -20,9 +20,10 @@
     <?php
         include('navigation.php');
         ?>
-
+        
+  <div class="content-body">
     <div class="container-fluid">
-        <div class="content-body">
+      
 
             <div class="card">
                  <div class="card-body">

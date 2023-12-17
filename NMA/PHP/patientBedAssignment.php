@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="/NMA/bootstrap-theme/theme/css/style.css">
     <title>Assign/Remove Patient to Room/Bed</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
@@ -70,32 +71,80 @@
     </script>
 </head>
 <body>
-    <h2>Assign/Remove Patient to Room/Bed</h2>
-    <form action="process_patientBedAssignment.php" method="post">
-        <label for="patient">In-Patient:</label>
-        <select name="patient_id" id="patient" onchange="fetchPatientAssignment()">
-            <?php include('populate_in_patients.php'); ?>
-        </select><br>
+<div id="main-wrapper">
+    
+    <?php
+        include('navigation.php');
+        ?>
 
-        <label for="room">Room:</label>
-        <select name="room_id" id="room" onchange="fetchAvailableBeds(this.value)">
-            <!-- Room options populated here -->
-        </select><br>
+    <div class="content-body">
+        <div class="basic-form container-fluid">
+            
 
-        <label for="bed">Bed:</label>
-        <select name="bed_number" id="bed">
-            <!-- Bed options will be populated dynamically -->
-        </select><br>
+        
+            
 
-        <label for="action">Action:</label>
-        <select name="action" id="action">
-            <!-- Action options will be populated dynamically -->
-        </select><br>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title"> Assign/Remove Patient to Room/Bed</h4>
+                            <div class="basic-form">
+                                <form action="process_patientBedAssignment.php" method="post"> 
+                                    <div class="form-row">
 
-        <input type="submit" value="Submit">
-    </form>
-    <a href="Patient_Personnel_Assignments.php"><button>Return to In-Patient Management</button></a>
-    <a href="index.php"><button>Return to Home Page</button></a>
+                                    <div class="form-group col-6">
+
+                                        <label for="patient">In-Patient:</label>
+                                                <select name="patient_id" id="patient" onchange="fetchPatientAssignment()" class="form-control">
+                                                    <?php include('populate_in_patients.php'); ?>
+                                                </select><br>     
+
+                                        <labelfor="bed">Room:</label>
+                                                <select name="room_id" id="room_id" class="form-control">
+                                                <?php include('populate_available_rooms.php'); ?>
+                                                </select><br>
+
+                                        <labelfor="bed">Bed:</label>
+                                        <input type="text" name="bed_number" id="bed" class="form-control">
+
+                                        <label for="action">Action:</label>
+                                            <select name="action" id="action" class="form-control">
+                                                <option value="assign">Assign</option>
+                                                <option value="remove">Remove</option>
+                                            </select><br>
+                                        </div>
+                                        
+                                    </div>
+                                   
+                                    
+                                    
+                                        
+                            
+                                    
+                                    <button class="btn btn-success btn" type="submit" class="btn btn-dark" value="Submit">Submit</button>
+
+
+                                </form>
+
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            <!---- end -->
+        </div>
+    </div>
+
+
+</div>
+
+<script src="/NMA/bootstrap-theme/theme/plugins/common/common.min.js"></script>
+    <script src="/NMA/bootstrap-theme/theme/js/custom.min.js"></script>
+    <script src="/NMA/bootstrap-theme/theme/js/settings.js"></script>
+    <script src="/NMA/bootstrap-theme/theme/js/gleek.js"></script>
+    <script src="/NMA/bootstrap-theme/theme/js/styleSwitcher.js"></script>
+    <script src="/NMA/bootstrap-theme/theme/plugins/sweetalert/js/sweetalert.min.js"></script>
+    <script src="/NMA/bootstrap-theme/theme/plugins/sweetalert/js/sweetalert.init.js"></script>
 </body>
 </html>
 

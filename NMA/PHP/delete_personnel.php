@@ -21,7 +21,7 @@
     ?>
 
     <div class="content-body">
-        <div class="col-lg-12">
+        <div class="col-lg-12 container-fluid">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title"> Delete Personnel</h4>

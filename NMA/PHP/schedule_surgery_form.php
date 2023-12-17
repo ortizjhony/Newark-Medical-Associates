@@ -34,9 +34,10 @@ include('session.php');
     <?php
         include('navigation.php');
         ?>
-  
+
+<div class="content-body"> 
     <div class="container-fluid">
-      <div class="content-body">
+
 
 
             <div class="col-lg-12">
@@ -108,7 +109,9 @@ include('session.php');
                 
                                             <div class="col-3"> </div>
                                             <div class="col-3">    
-                                                <button class="btn btn-success btn" type="submit" class="btn btn-dark" value="Schedule Appointment">Schedule Appointment</button>
+                                                <button class="btn btn-success btn" type="submit" class="btn btn-dark" value="Schedule Appointment">Schedule Appointment</button> 
+                                                <p></p>
+                                                <a href="index.php"><button type="button" class="btn mb-1 btn-primary">Return to Home Page</button></a>
 
                                             </div>
                                         </div>
@@ -116,18 +119,25 @@ include('session.php');
 
             
                                     </form>
+
+                            
                                 </div>
+
+                       
                             </div>
                             </div>
                         </div>
                     </div>
 
-
+                 
+        </div>
 
 
 
         </div>
-        <a href="index.php"><button>Return to Home Page</button></a>
+
+
+
     </div>
 </div>
 

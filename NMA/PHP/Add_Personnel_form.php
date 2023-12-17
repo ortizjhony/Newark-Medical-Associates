@@ -25,7 +25,7 @@
 
  
         <div class="content-body">
-            <div class="col-lg-12">
+            <div class="col-lg-12 container-fluid">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title"> Add New Personnel</h4>
@@ -127,7 +127,7 @@
                 
                                             <div class="col-3"> </div>
                                             <div class="col-3">    
-                                                <button class="btn btn-success btn" type="submit" class="btn btn-dark" value="Add Personnel">Add Personnel</button>
+                                                <button class="btn btn-success btn" type="submit"  value="Add Personnel">Add Personnel</button>
                                         
                                             </div>
                                     </div>

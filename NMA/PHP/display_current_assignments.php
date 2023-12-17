@@ -15,9 +15,10 @@
     <?php
         include('navigation.php');
         ?>
-  
+
+<div class="content-body">  
     <div class="container-fluid">
-      <div class="content-body">
+
       
             <div class="row">
                     <div class="col-12">

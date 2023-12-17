@@ -6,7 +6,8 @@ $result = $conn->query($sql);
 
 $rooms = [];
 while ($row = $result->fetch_assoc()) {
-    $rooms[] = ['roomNumber' => $row['RoomNumber']];
+    $rooms[] = ['RoomNumber' => $row['RoomNumber']];
+    echo "<option value='".$row["RoomNumber"]."'>".$row["RoomNumber"]."</option>";
 }
 
 echo json_encode($rooms);

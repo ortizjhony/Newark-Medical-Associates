@@ -14,51 +14,21 @@
 
 
 <style>
-        .tab, .sub-tab {
-            display: none;
+        
+        .landing-page {
+            background-image: url("/NMA/images/landing.png");
+            background-repeat: no-repeat;
+            background-size:cover;
         }
-       /* Additional styles 
-   body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        .tab {
-            background-color: #fff;
-            padding: 20px;
-            margin-top: 20px;
-        }
-        button {
-            display: inline-block;
-            background: #333;
-            color: #fff;
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-            margin-right: 5px;
-            margin-top: 10px;
-        }
-        button:hover {
-            background: #555;
-        }
-        .pdf-container {
-            height: 500px;
-        }
-        .pdf-container iframe {
-            width: 100%;
-            height: 100%;
-        }*/
+        
     </style>
 
 
 </head>
 
 <body>
+
+<div class="landing-page">
  <div id="main-wrapper">
     
     <?php
@@ -67,53 +37,93 @@
 
  
     <div class="content-body">
+
+
         
-            <h1>Welcome to Newark Medical Associates</h1>
-            <p>Description of the database requirements...</p>
+        <div class="container-fluid mt-3">
+            <div class="row">
 
-            <button onclick="showTab('appReq')">Application Requirements</button>
-            <button onclick="showTab('patientMgmt')">Patient Management</button>
-            <button onclick="showTab('inPatientMgmt')">Inpatient Management</button>
-            <button onclick="showTab('staffMgmt')">Clinic Staff Management</button>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card gradient-3">
+                        <div class="card-body">
+                            <h3 class="card-title text-white">In-Patients</h3>
+                            <div class="d-inline-block">
+                                <h2 class="text-white">
+                                <?php
+                                    include('session.php');
 
-        <div id="appReq" class="tab">
-                <h2>Database Requirements</h2>
-                <div class="pdf-container">
-                    <iframe src="Database_design.pdf" style="width: 90%; height: 500px;" title="Database Design"></iframe>
+                                    $sql = "SELECT count(*) as ct FROM Patient pa JOIN Room r on r.currentpatient = pa.patientnumber;";
+                                    $result = $conn->query($sql);
+                                    
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo $row['ct'];
+                                        
+                                    }
+
+                                    $conn->close();
+                                    ?>
+                                    </h2>
+                                
+                            </div>
+                            <span class="float-right display-5 opacity-5"><i class="fa fa-users"></i></span>
+                        </div>
+                    </div>
+                </div>  <!-- End widget 1 -->
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="card gradient-4">
+                        <div class="card-body">
+                            <h3 class="card-title text-white">Consultations Today</h3>
+                            <div class="d-inline-block">
+                                <h2 class="text-white">
+                                <?php
+                                    include('session.php');
+
+                                    $sql = "Select count(*) as ct from consultation con where DATE_FORMAT(con.ConsultationDateTime,'%m/%d/%Y') = DATE_FORMAT(SYSDATE(),'%m/%d/%Y');";
+                                    $result = $conn->query($sql);
+                                    
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo $row['ct'];
+                                        
+                                    }
+
+                                    $conn->close();
+                                    ?>
+
+
+                                </h2>
+                                <p class="text-white mb-0"><?php
+                                        include('session.php');
+
+                                        $sql = "Select distinct DATE_FORMAT(con.ConsultationDateTime,'%W %M %d') as ct from consultation con where DATE_FORMAT(con.ConsultationDateTime,'%m/%d/%Y') = DATE_FORMAT(SYSDATE(),'%m/%d/%Y');";
+                                        $result = $conn->query($sql);
+                                        
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo $row['ct'];
+                                            
+                                        }
+
+                                        $conn->close();
+                                        ?></p>
+                            </div>
+                            <span class="float-right display-5 opacity-5"><i class="fa fa-heart"></i></span>
+                        </div>
+                    </div>
                 </div>
-                <h2>ERD</h2>
-                <div class="pdf-container">
-                    <iframe src="CS631 ERD DeJesus Ortiz.drawio.pdf" style="width: 90%; height: 500px;" title="Database Design"></iframe>
 
-                </div>
-                <h2>Application Requirements</h2>
-                <div class="pdf-container">
-                    <iframe src="app_requirements.pdf" style="width: 90%; height: 500px;" title="Database Design"></iframe>
-                </div>
-            </div>
+                <!-- End widget 2 -->
 
-            <div id="patientMgmt" class="tab">
-                <h2>Patient Management</h2>
-                <button onclick="window.location.href='add_patient_form.php'">Insert a New Patient</button>
-                <button onclick="window.location.href='view_patient_info.php'">View Patient Information</button>
-                <button onclick="window.location.href='schedule_appointment_form.php'">Schedule an Appointment with a Doctor</button>
-                <button onclick="window.location.href='checkDiagnoses.php'">Check Previous Diagnoses and Illnesses</button>
-                <button onclick="window.location.href='view_schedule.php'">View Schedule per Doctor and per Day</button>
-            </div>
 
-            <div id="inPatientMgmt" class="tab">
-                <h2>Inpatient Management</h2>
-                <button onclick="window.location.href='Patient_Personnel_Assignments.php'">Patient/Personnel Assignments</button>
-                <button onclick="window.location.href='view_schedule_surgery.php'">View Surgery Schedule</button>
-                <button onclick="window.location.href='schedule_surgery_form.php'">Book Surgery</button>
-            </div>
+                
 
-            <div id="staffMgmt" class="tab">
-                <h2>Clinic Staff Management</h2>
-                <button onclick="window.location.href='Personnel.php'">Personnel Management</button>
-                <button onclick="window.location.href='Personnel_Schedule.php'">Personnel Schedule</button>
+
             </div>
         </div>
+
+        </div>
+
+        
+    
     </div>
 
 </div>
