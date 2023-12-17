@@ -46,13 +46,15 @@
                 <div class="col-lg-3 col-sm-6">
                     <div class="card gradient-3">
                         <div class="card-body">
-                            <h3 class="card-title text-white">In-Patients</h3>
+                            <h3 class="card-title text-white">Patients Admitted</h3>
                             <div class="d-inline-block">
                                 <h2 class="text-white">
                                 <?php
                                     include('session.php');
 
-                                    $sql = "SELECT count(*) as ct FROM Patient pa JOIN Room r on r.currentpatient = pa.patientnumber;";
+                                    $sql = "SELECT count(*) AS ct
+                                    FROM InPatient i
+                                    INNER JOIN Patient p on i.PatientNumber = p.PatientNumber;";
                                     $result = $conn->query($sql);
                                     
                                     while ($row = $result->fetch_assoc()) {
@@ -70,6 +72,35 @@
                     </div>
                 </div>  <!-- End widget 1 -->
 
+
+              <div class="col-lg-3 col-sm-6">
+                    <div class="card gradient-2">
+                        <div class="card-body">
+                            <h3 class="card-title text-white">Overall Patients</h3>
+                            <div class="d-inline-block">
+                                <h2 class="text-white">
+                                <?php
+                                    include('session.php');
+
+                                    $sql = "SELECT count(*) AS ct
+                                    FROM Patient ";
+                                    $result = $conn->query($sql);
+                                    
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo $row['ct'];
+                                        
+                                    }
+
+                                    $conn->close();
+                                    ?>
+                                    </h2>
+                            </div>
+                            <span class="float-right display-5 opacity-5"><i class="fa fa-users"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End widget 2 -->
                 <div class="col-lg-3 col-sm-6">
                     <div class="card gradient-4">
                         <div class="card-body">
@@ -111,12 +142,36 @@
                     </div>
                 </div>
 
-                <!-- End widget 2 -->
-
-
+                <!-- End widget 3 -->
                 
 
+              <div class="col-lg-3 col-sm-6">
+                    <div class="card gradient-5">
+                        <div class="card-body">
+                            <h3 class="card-title text-white">Overall Doctor Visits</h3>
+                            <div class="d-inline-block">
+                                <h2 class="text-white">
+                                <?php
+                                    include('session.php');
 
+                                    $sql = "SELECT count(*) AS ct
+                                    FROM Consultation ";
+                                    $result = $conn->query($sql);
+                                    
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo $row['ct'];
+                                        
+                                    }
+
+                                    $conn->close();
+                                    ?>
+                            </div>
+                            <span class="float-right display-5 opacity-5"><i class="fa fa-heart"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End widget 4 -->
             </div>
         </div>
 
