@@ -111,6 +111,7 @@
             <div id="staffMgmt" class="tab">
                 <h2>Clinic Staff Management</h2>
                 <button onclick="window.location.href='Personnel.php'">Personnel Management</button>
+                <button onclick="window.location.href='Personnel_Schedule.php'">Personnel Schedule</button>
             </div>
         </div>
     </div>
