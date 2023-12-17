@@ -1,102 +1,144 @@
 <?php
-include('session.php');
-
-// Fetch patients without assigned doctors
-$sqlPatients = "SELECT PatientNumber, Name FROM Patient WHERE PrimaryPhysician IS NULL";
-$resultPatients = $conn->query($sqlPatients);
-
-// Fetch all doctors
-$sqlDoctors = "SELECT EmploymentNumber, Name FROM Personnel WHERE Role = 'Physician' OR Role = 'Surgeon'";
-$resultDoctors = $conn->query($sqlDoctors);
-
+   include('session.php');
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="/NMA/bootstrap-theme/theme/css/style.css">
-    <title>Assign Doctor to Patient</title>
+    <link href="./plugins/sweetalert/css/sweetalert.css" rel="stylesheet">
+
+
+    <title>Add New Patient</title>
+    <script>
+        function validateForm() {
+            var ssn = document.forms["patientForm"]["ssn"].value;
+            var dob = document.forms["patientForm"]["dob"].value;
+            var gender = document.forms["patientForm"]["gender"].value.toUpperCase();
+            var tel = document.forms["patientForm"]["tel"].value;
+            var bloodType = document.forms["patientForm"]["blood_type"].value.toUpperCase();
+            var validBloodTypes = ['A', 'AB', 'B', 'O', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+            var ssnPattern = /^[0-9]{3}-[0-9]{2}-[0-9]{4}$/;
+            var telPattern = /^[0-9]{3}-[0-9]{4}$/;
+
+            if (!ssnPattern.test(ssn)) {
+                alert("Invalid SSN format. Format should be XXX-XX-XXXX with numbers only.");
+                return false;
+            }
+            if (isNaN(Date.parse(dob))) {
+                alert("Invalid Date of Birth.");
+                return false;
+            }
+            if (gender !== 'M' && gender !== 'F') {
+                alert("For this DEMO Gender must be either 'M' or 'F'.");
+                return false;
+            }
+            if (!telPattern.test(tel)) {
+                alert("Invalid telephone number format. Format should be XXX-XXXX.");
+                return false;
+            }
+            if (!validBloodTypes.includes(bloodType)) {
+                alert("Invalid Blood Type. Enter one of the following: A, B, AB, O, A+, A-, B+, B-, AB+, AB-, O+, O-.");
+                return false;
+            }
+            return true; // Form is valid
+        }
+    </script>
+
 </head>
 <body>
-
 <div id="main-wrapper">
     <?php
         include('navigation.php');
         ?>
 
     <div class="content-body">
+        <div class="basic-form container-fluid">
 
-        <div class="col-lg-12 container-fluid">
+     <!--   <form name="patientForm" action="insert_patient.php" method="post" onsubmit="return validateForm()">
+                Name: <input type="text" name="name"><br>
+                Gender: <input type="text" name="gender"><br>
+                Date of Birth: <input type="date" name="dob"><br>
+                Address: <input type="text" name="address"><br>
+                Telephone Number: <input type="text" name="tel"><br>
+                Social Security Number: <input type="text" name="ssn"><br>
+                Primary Physician ID: <input type="number" name="physician_id"><br>
+                Blood Type: <input type="text" name="blood_type"><br>
+                <input type="submit" value="Add Patient">
+            </form>-->
+
+
+      
+
+    <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
+                                <h4 class="card-title"> Insert a New Patient</h4>
                                 <div class="basic-form">
+                                    <form name="patientForm" action="insert_patient.php" method="post" onsubmit="return validateForm()"> 
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Name</label>
+                                                <input type="text" name="name" class="form-control"><br>
+                                            </div>
 
-                                <h2>Assign Doctor to Patient</h2> <br>
-                                    
-
-                                <form action="process_assign_doctor.php" method="post"> 
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label for="patient">Select Patient</label><br>
-                                            <select name="patient_id" id="patient" class="form-control">
-                                            <?php 
-                                                if ($resultPatients->num_rows > 0) {
-                                                    while($row = $resultPatients->fetch_assoc()) {
-                                                        echo "<option value='" . $row['PatientNumber'] . "'>" . $row['Name'] . "</option>";
-                                                    }
-                                                } else {
-                                                    echo "<option>No patients found</option>";
-                                                }
-                                                ?>
-                                            </select><br>
+                                            <div class="form-group col-md-6">
+                                                <label>Social Security Number</label>
+                                                <input type="text" name="ssn" class="form-control"><br>
+                                            </div>
                                         </div>
-
-                                        <div class="form-group col-md-6">
-                                            <label for="doctor">Doctor</label>
-                                            <select name="doctor_id" id="doctor" class="form-control">
-                                                <?php 
-                                                    if ($resultDoctors->num_rows > 0) {
-                                                        while($row = $resultDoctors->fetch_assoc()) {
-                                                            echo "<option value='" . $row['EmploymentNumber'] . "'>" . $row['Name'] . "</option>";
-                                                        }
-                                                    } else {
-                                                        echo "<option>No doctors found</option>";
-                                                    }
-                                                ?>
-                                            </select><br>
+                                        <div class="form-group">
+                                            <label>Address</label>
+                                            <input type="text" name="address" class="form-control"><br>
                                         </div>
-                                    </div>
+                                        
+                                        <div class="form-row">
 
-                                
-                                    
-                                    <div class="row justify-content-between">
+                                        <div class="form-group col-md-6" >
+                                            <label>Date of Birth</label>
+                                            <input type="date" name="dob" class="form-control"><br>
+                                        </div>
+                                            
+                                            <div class="form-group col-md-6">
+                                                <label>Telephone</label>
+                                                <input type="text" name="tel" class="form-control"><br>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label>Gender</label>
+                                                <input type="text" name="gender" class="form-control"><br>
+                                            </div>
+
+                                            <div class="form-group col-md-2">
+                                                <label>Blood Type</label>
+                                                <input type="text" name="blood_type" class="form-control"><br>
+                                            </div>
+                                            
+                                            <div class="form-group col-md-2">
+                                                <label>Primary Physician ID:</label>
+                                                <input type="number" name="physician_id" class="form-control"><br>
+                                            </div>
+                                        </div>
+                                      
+                                        <button class="btn btn-success btn" type="submit" class="btn btn-dark" value="Add Patient">Add Patient</button>
+
             
-                                        <div class="col-3"> </div>
-                                        <div class="col-3">    
-                                            <button class="btn btn-success btn" type="submit" class="btn btn-dark" value="Assign Doctor">Assign Doctor</button>
-                                            <a href="display_current_assignments.php"><button type="button" class="btn mb-1 btn-primary">Return to Current Assignments</button></a>
-                                        </div>
-                                    </div>
-                                    
-
-        
-                                </form>
-                                
-                            </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-            </div>
+                    </div>
+<!---- end -->
 
-
-
-
-
-
-
-
-
+        </div>
     </div>
 </div>
+
     <script src="/NMA/bootstrap-theme/theme/plugins/common/common.min.js"></script>
     <script src="/NMA/bootstrap-theme/theme/js/custom.min.js"></script>
     <script src="/NMA/bootstrap-theme/theme/js/settings.js"></script>
@@ -106,4 +148,5 @@ $resultDoctors = $conn->query($sqlDoctors);
     <script src="/NMA/bootstrap-theme/theme/plugins/sweetalert/js/sweetalert.init.js"></script>
 </body>
 </html>
+
 
