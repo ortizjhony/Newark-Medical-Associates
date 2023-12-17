@@ -19,7 +19,7 @@ if ($result->num_rows > 0) {
         echo "<td>" . $row["BloodType"] . "</td>";
         echo "<td>" . $row["PhysicianAssigned"] . "</td>";
         echo "<td>" . $row["PhysicianName"] . "</td>";
-        echo "<td><a href='view_medical_history.php?patient_id=" . $row["PatientNumber"] . "'><button>View Medical History</button></a></td>";
+        echo "<td><a href='view_medical_history.php?patient_id=" . $row["PatientNumber"] . "'> <button type='button' class='btn mb-1 btn-outline-info'>View Medical History</button></a></td>";
         echo "</tr>";
     }
 } else {
