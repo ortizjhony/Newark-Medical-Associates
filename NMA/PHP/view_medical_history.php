@@ -13,9 +13,9 @@ if (isset($_GET['patient_id'])) {
         LEFT JOIN   Personnel pr on p.PrimaryPhysician = pr.EmploymentNumber
         LEFT JOIN Personnel pe on c.PhysicianNumber = pe.EmploymentNumber
         LEFT JOIN PatientIllness ill on ill.ConsultationID = c.ConsultationID
-        INNER JOIN Illness illCode on ill.IllnessCode = illCode.IllnessCode
+        LEFT JOIN Illness illCode on ill.IllnessCode = illCode.IllnessCode
         Left JOIN PatientAllergy pall on pall.ConsultationID = c.ConsultationID
-        INNER JOIN Allergy allergy on pall.AllergyCode = allergy.AllergyCode
+        Left JOIN Allergy allergy on pall.AllergyCode = allergy.AllergyCode
         GROUP BY
             p.PatientNumber,
             d.CholesterolHDL,

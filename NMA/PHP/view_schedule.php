@@ -64,7 +64,6 @@
                                             <div class="col-3"> </div>
                                             <div class="col-3">    
                                                 <button class="btn btn-success btn" type="submit" class="btn btn-dark" value="Submit">View Schedule</button>
-
                                             </div>
                                         </div>
                                       

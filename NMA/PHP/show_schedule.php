@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Start the table and print the first row
         echo "<h2>Schedule for Doctor: $doctorName on $scheduleDate</h2>";
         echo "<table border='1'>";
-        echo "<tr><th>Time</th><th>Patient Name</th><th>Reason for Consulation</th><th></th></tr>";
+        echo "<tr><th>Time</th><th>Patient Name</th><th>Reason for Consulation</th></tr>";
         echo "<tr>";
         echo "<td>" . $row["ConsultationDateTime"] . "</td>";
         echo "<td>" . $row["PatientName"] . "</td>";
@@ -53,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 $conn->close();
+
 
 echo '<a href="view_schedule.php"><button>Return to View Schedule</button></a>';
 echo '<a href="index.php"><button>Return to Home Page</button></a>';
