@@ -5,7 +5,7 @@ $sql = "SELECT pa.PatientNumber, pa.Name, pa.Gender, pa.DateOfBirth, pa.Address,
 $result = $conn->query($sql);
 
 echo "<table class='table table-striped table-bordered zero-configuration'>";
-echo "<tr><th>Patient ID</th><th>Name</th><th>Gender</th><th>Date of Birth</th><th>Address</th><th>Telephone Number</th><th>Blood Type</th><th>Primary Physician</th><th>Physician Name</th></tr>";
+echo "<tr><th>Patient ID</th><th>Name</th><th>Gender</th><th>Date of Birth</th><th>Address</th><th>Telephone Number</th><th>Blood Type</th><th>Primary Physician</th><th>Physician Name</th><th>Medical History</th></tr>";
 
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
@@ -19,6 +19,7 @@ if ($result->num_rows > 0) {
         echo "<td>" . $row["BloodType"] . "</td>";
         echo "<td>" . $row["PhysicianAssigned"] . "</td>";
         echo "<td>" . $row["PhysicianName"] . "</td>";
+        echo "<td><a href='view_medical_history.php?patient_id=" . $row["PatientNumber"] . "'><button>View Medical History</button></a></td>";
         echo "</tr>";
     }
 } else {
